@@ -1,0 +1,24 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    height: 300px;
+    width: 400px;
+}
+
+#image {
+    border: lightcoral solid 3px;
+    margin-right: 15px;
+    padding: 10px;
+}
+#grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+#main {
+    margin: 20px;
+}
