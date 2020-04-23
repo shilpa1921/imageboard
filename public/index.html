@@ -2,35 +2,39 @@
 <html>
 <head>
     <title>My Imageboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel = "stylesheet" href ="css/styles.css">
 </head>
 <body>
 
-    <h1>My imageboard with MSG</h1>
+    <h1>My imageboard</h1>
 
 
 <!-- this container for our vue instanceit will have access to our vue code -->
     <div id = "main">
 
 
-      <!-- <h2>Hi {{ name }} How are you </h2>
+        <form id ="form">
+          <input v-model = "title" type = "text" name = "title" placeholder="title">
+          <input v-model = "description" type = "text" name = "description" placeholder="decription">
+          <input v-model = "username" type = "text" name = "username" placeholder="username">
+          <input @change = "handleChange" type = "file" name = "file" accept="image/*">
+          <button @click = "handleClick">Submit</button>
+        </form>
 
 
-    <h2>2 * 2 = {{2 * 2}}</h2>
 
-    <h2>Name capatalised: {{name.toUpperCase()}}</h2>
-    <h2 v-if = "seen">you can see me!!!</h2>
-    <h2 v-else>"seen" you cannnnnnnnnnnnnnnnn see me!!!</h2> -->
-
+      <div id = container>
       <ul id = "grid">
-            <div v-for='image in images' @click='myFunction'>
-              <div id = "image"> 
+          <div v-for='image in images' >
+            <div id = "image"> 
                <img v-bind:src="image.url"><br>
                {{image.title}}
-               </div> 
+            </div> 
 
             </div>
-        </ul>
+      </ul>
+        </div>
 
     </div>
 
