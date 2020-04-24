@@ -13,6 +13,13 @@
 <!-- this container for our vue instanceit will have access to our vue code -->
     <div id = "main">
 
+      <first-component 
+   v-if="selectedImage" 
+   post-title="goodbye" 
+   :id="selectedImage"
+   @close = "closeMe"
+  ></first-component>
+
 
         <form id ="form">
           <input v-model = "title" type = "text" name = "title" placeholder="title">
@@ -26,10 +33,10 @@
 
       <div id = container>
       <ul id = "grid">
-          <div v-for='image in images' >
+          <div  @click = "selectedImage = image.id" v-for='image in images' >
             <div id = "image"> 
                <img v-bind:src="image.url"><br>
-               {{image.title}}
+               {{image.title}} {{image.id}}
             </div> 
 
             </div>
@@ -37,6 +44,28 @@
         </div>
 
     </div>
+
+    <script type="text/x-template" id="template">
+        <div class="component">
+           <div>
+                <h1 @click="closeModal">X</h1>
+                <!-- <div v-for='item in name' ></div> -->
+                <div v-for='item in arr' >
+                <h2 id = "title">Title:{{item.title}}</h2>
+                <img v-bind:src="item.url"><br>
+                <h3 id ="desc">Description:{{item.description}}</h3>
+                <p id = "user">Created by {{item.username}}{{item.created_at}}</p>
+                </div>
+
+              </div>
+              <div>
+
+                <h2>shilpa</h2>
+              </div>
+            <!-- <button @click="count++">Click Me!</button>
+            <h3>Count: {{count}}</h3> -->
+        </div>
+    </script>
 
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>

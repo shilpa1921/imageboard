@@ -1,9 +1,46 @@
 console.log("shilpa");
 
 (function () {
+    Vue.component("first-component", {
+        template: "#template",
+        props: ["postTitle", "id"],
+        mounted: function () {
+            console.log("postTile: ", this.postTitle);
+            console.log("id in mounted of my component: ", this.id);
+            // we can now make a request to the server sending the id,
+            // and asking for all the information about that id.
+            var self = this;
+            axios
+                .post("/info", { id: this.id })
+                .then(function (response) {
+                    console.log("This is the response data: ", response.data);
+
+                    self.arr = response.data;
+                    console.log("array", self.arr);
+                })
+                .catch(function (err) {
+                    console.log("Error in POST /image-post: ", err);
+                });
+        },
+
+        data: function () {
+            return {
+                arr: [],
+                count: 0,
+            };
+        },
+        methods: {
+            closeModal: function () {
+                console.log("i am emitting from the component... (child)");
+                this.$emit("close");
+            },
+        },
+    });
+
     new Vue({
         el: "#main",
         data: {
+            selectedImage: false,
             images: [],
             title: "",
             description: "",
@@ -41,6 +78,12 @@ console.log("shilpa");
                         console.log("err from post /upload", err);
                     });
             },
+
+            closeMe: function () {
+                console.log("close me");
+                this.selectedImage = false;
+            },
+
             handleChange: function (e) {
                 console.log("handle change running");
                 console.log("file", e.target.files[0]);

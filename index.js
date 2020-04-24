@@ -42,28 +42,51 @@ app.get("/images", (req, res) => {
             console.log("error in /images", err);
         });
 });
+app.use(express.json());
+app.post("/info", (req, res) => {
+    console.log("The req.body: ", req.body.id);
+    var id = req.body.id;
+    db.getselctedimageinfos(id)
+        .then((result) => {
+            return result;
+        })
+        .then((results) => {
+            console.log("image info for selected image", results);
+            res.json(results);
+        })
+        .catch((err) => {
+            console.log("error in getting info for selected img", err);
+        });
+});
 
 app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
     console.log("file", req.file.filename);
     console.log("input", req.body.title);
-    let title = req.body.title;
-    let description = req.body.description;
-    let username = req.body.username;
-    let filename = req.file.filename;
-    let url = config.s3Url + filename;
-    console.log("json", config.s3Url + filename);
 
-    var data = {
-        url: url,
-        title: title,
-        username: username,
-        description: description,
-    };
+    if (req.file) {
+        // you'll eventually want to make a db insert here for all the info!
+        let title = req.body.title;
+        let description = req.body.description;
+        let username = req.body.username;
+        let filename = req.file.filename;
+        let url = config.s3Url + filename;
+        console.log("json", config.s3Url + filename);
 
-    db.addImage(url, username, title, description);
-    console.log("data", data);
+        var data = {
+            url: url,
+            title: title,
+            username: username,
+            description: description,
+        };
+        db.addImage(url, username, title, description);
+        console.log("data", data);
 
-    res.json(data);
+        res.json(data);
+    } else {
+        res.json({
+            success: false,
+        });
+    }
 });
 
 app.listen(8080, () => console.log("Server is running"));

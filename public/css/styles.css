@@ -49,6 +49,46 @@ img {
     grid-template-columns: 30% 30% 30%;
 }
 
+.component {
+    background-color: gray;
+    position: fixed;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    margin: 30px;
+}
+.component img {
+    width: 300px;
+    top: 20px;
+    left: 30px;
+    position: relative;
+}
+
+#title {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+#desc {
+    margin-top: 20px;
+    margin-left: 20px;
+}
+
+#user {
+    margin-left: 20px;
+}
+
+.component h1 {
+    position: fixed;
+    right: 10px;
+    top: 0;
+}
+
 @media screen and (min-width: 320px) and (max-width: 480px) {
     * {
         box-sizing: border-box;

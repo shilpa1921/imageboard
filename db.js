@@ -15,6 +15,17 @@ module.exports.getimageinfos = () => {
         });
 };
 
+module.exports.getselctedimageinfos = (id) => {
+    return db
+        .query(`SELECT * FROM images WHERE images.id = $1 `, [id])
+        .then((results) => {
+            return results.rows;
+        })
+        .catch((err) => {
+            console.log("error in getting info selected image", err);
+        });
+};
+
 module.exports.addImage = (url, username, title, description) => {
     return db.query(
         `INSERT INTO images (url, username, title, description) VALUES ($1, $2, $3, $4)`,

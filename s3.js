@@ -38,7 +38,7 @@ exports.upload = (req, res, next) => {
             console.log("amazon put object complete");
             next();
 
-            // fs.unlink(path, () => {});
+            fs.unlink(path, () => {});
         })
         .catch((err) => {
             // uh oh
