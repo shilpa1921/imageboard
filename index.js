@@ -42,8 +42,11 @@ app.get("/images", (req, res) => {
             console.log("error in /images", err);
         });
 });
+
 app.use(express.json());
 app.post("/info", (req, res) => {
+    let finalJson = [];
+
     console.log("The req.body: ", req.body.id);
     var id = req.body.id;
     db.getselctedimageinfos(id)
@@ -52,7 +55,18 @@ app.post("/info", (req, res) => {
         })
         .then((results) => {
             console.log("image info for selected image", results);
-            res.json(results);
+            finalJson.push(results);
+        })
+        .then(() => {
+            db.getcomments()
+                .then((results) => {
+                    console.log("results", results.rows);
+                    return results.rows;
+                })
+                .then((result) => {
+                    finalJson.push(result);
+                    res.json(finalJson);
+                });
         })
         .catch((err) => {
             console.log("error in getting info for selected img", err);
@@ -87,6 +101,18 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
             success: false,
         });
     }
+});
+
+app.post("/upload-comment", (req, res) => {
+    console.log("comment info", req.body);
+    var img_id = req.body.id;
+    var username = req.body.username;
+    var comment = req.body.comment;
+
+    db.addComments(username, comment, img_id).then((result) => {
+        console.log("Commnet inserted ", result.rows[0]);
+        res.json(result.rows[0]);
+    });
 });
 
 app.listen(8080, () => console.log("Server is running"));

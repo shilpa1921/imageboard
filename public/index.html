@@ -59,9 +59,25 @@
 
               </div>
               <div>
+                <form id ="formcom">
+                      
+                    <input v-model = "username" type = "text" name = "username" placeholder="username">
+                    <input v-model = "comment" type = "text" name = "comment" placeholder="comment">
+                    <button @click = "ClickInComponent">Post</button>
+                   
+                  
+                </form> 
+                <div id = "comment" v-for = "each in comments">
+                       <h5> {{each.username}}</h5>
+                       <h5> {{each.comment}}</h5>
+                      </div>
+                 <!-- <div v-for='each in comments'> -->
 
-                <h2>shilpa</h2>
+          
+                 </div>
+               
               </div>
+              
             <!-- <button @click="count++">Click Me!</button>
             <h3>Count: {{count}}</h3> -->
         </div>

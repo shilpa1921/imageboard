@@ -14,6 +14,16 @@ module.exports.getimageinfos = () => {
             console.log("err111", err);
         });
 };
+module.exports.getcomments = () => {
+    return db
+        .query(`SELECT * FROM comments order by created_at DESC`)
+        .then((results) => {
+            return results;
+        })
+        .catch((err) => {
+            console.log("err111", err);
+        });
+};
 
 module.exports.getselctedimageinfos = (id) => {
     return db
@@ -30,5 +40,12 @@ module.exports.addImage = (url, username, title, description) => {
     return db.query(
         `INSERT INTO images (url, username, title, description) VALUES ($1, $2, $3, $4)`,
         [url, username, title, description]
+    );
+};
+
+module.exports.addComments = (username, comment, img_id) => {
+    return db.query(
+        `INSERT INTO comments (username, comment, img_id) VALUES ($1, $2, $3) RETURNING *`,
+        [username, comment, img_id]
     );
 };

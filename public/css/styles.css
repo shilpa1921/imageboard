@@ -62,6 +62,17 @@ img {
     top: 0;
     margin: 30px;
 }
+
+#comment {
+    top: 100px;
+    position: relative;
+    display: inline-block;
+}
+#formcom {
+    position: relative;
+    top: 100px;
+}
+
 .component img {
     width: 300px;
     top: 20px;

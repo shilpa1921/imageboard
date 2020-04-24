@@ -15,8 +15,13 @@ console.log("shilpa");
                 .then(function (response) {
                     console.log("This is the response data: ", response.data);
 
-                    self.arr = response.data;
-                    console.log("array", self.arr);
+                    self.arr = response.data.shift();
+                    self.comments = response.data[0];
+
+                    console.log(
+                        "This is the response data: ",
+                        response.data[0]
+                    );
                 })
                 .catch(function (err) {
                     console.log("Error in POST /image-post: ", err);
@@ -27,12 +32,34 @@ console.log("shilpa");
             return {
                 arr: [],
                 count: 0,
+                username: "",
+                comment: "",
+                comments: [],
             };
         },
         methods: {
             closeModal: function () {
                 console.log("i am emitting from the component... (child)");
                 this.$emit("close");
+            },
+
+            ClickInComponent: function (e) {
+                e.preventDefault();
+                console.log("this", this);
+                var self = this;
+                axios
+                    .post("/upload-comment", {
+                        id: this.id,
+                        username: this.username,
+                        comment: this.comment,
+                    })
+                    .then(function (res) {
+                        console.log("resp from post /upload-comment", res.data);
+                        self.comments.unshift(res.data);
+                    })
+                    .catch((err) => {
+                        console.log("err from post /upload-comment", err);
+                    });
             },
         },
     });
