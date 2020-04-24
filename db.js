@@ -14,9 +14,12 @@ module.exports.getimageinfos = () => {
             console.log("err111", err);
         });
 };
-module.exports.getcomments = () => {
+module.exports.getcomments = (id) => {
     return db
-        .query(`SELECT * FROM comments order by created_at DESC`)
+        .query(
+            `SELECT * FROM comments WHERE comments.img_id = $1 order by created_at DESC`,
+            [id]
+        )
         .then((results) => {
             return results;
         })
@@ -38,7 +41,7 @@ module.exports.getselctedimageinfos = (id) => {
 
 module.exports.addImage = (url, username, title, description) => {
     return db.query(
-        `INSERT INTO images (url, username, title, description) VALUES ($1, $2, $3, $4)`,
+        `INSERT INTO images (url, username, title, description) VALUES ($1, $2, $3, $4) RETURNING *`,
         [url, username, title, description]
     );
 };

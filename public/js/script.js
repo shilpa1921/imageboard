@@ -16,6 +16,7 @@ console.log("shilpa");
                     console.log("This is the response data: ", response.data);
 
                     self.arr = response.data.shift();
+                    console.log("This is the self array: ", self.arr);
                     self.comments = response.data[0];
 
                     console.log(

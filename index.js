@@ -58,9 +58,9 @@ app.post("/info", (req, res) => {
             finalJson.push(results);
         })
         .then(() => {
-            db.getcomments()
+            db.getcomments(id)
                 .then((results) => {
-                    console.log("results", results.rows);
+                    console.log("results", results);
                     return results.rows;
                 })
                 .then((result) => {
@@ -86,16 +86,17 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
         let url = config.s3Url + filename;
         console.log("json", config.s3Url + filename);
 
-        var data = {
-            url: url,
-            title: title,
-            username: username,
-            description: description,
-        };
-        db.addImage(url, username, title, description);
-        console.log("data", data);
+        // var data = {
+        //     url: url,
+        //     title: title,
+        //     username: username,
+        //     description: description,
+        // };
+        db.addImage(url, username, title, description).then((result) => {
+            console.log("newly added img", result.rows[0]);
 
-        res.json(data);
+            res.json(result.rows[0]);
+        });
     } else {
         res.json({
             success: false,
