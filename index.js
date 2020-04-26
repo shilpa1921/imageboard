@@ -116,4 +116,18 @@ app.post("/upload-comment", (req, res) => {
     });
 });
 
+app.post("/delete", (req, res) => {
+    console.log("requested id", req.body);
+    let id = req.body.id;
+    db.deleteImgWithComment(id)
+        .then((res) => {
+            db.deleteImg(id).then((result) => {
+                console.log("delete result", result);
+            });
+        })
+        .then((result) => {
+            res.json(id);
+        });
+});
+
 app.listen(8080, () => console.log("Server is running"));

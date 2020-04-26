@@ -36,6 +36,7 @@ console.log("shilpa");
                 username: "",
                 comment: "",
                 comments: [],
+                del: "",
             };
         },
         methods: {
@@ -61,6 +62,16 @@ console.log("shilpa");
                     .catch((err) => {
                         console.log("err from post /upload-comment", err);
                     });
+            },
+            deletePic: function (e) {
+                e.preventDefault();
+                console.log("this in delete", this);
+                axios.post("/delete", { id: this.id }).then((res) => {
+                    console.log("deleted", res.data);
+                });
+
+                this.$emit("close");
+                this.$emit("delete", this.id);
             },
         },
     });
@@ -110,6 +121,15 @@ console.log("shilpa");
             closeMe: function () {
                 console.log("close me");
                 this.selectedImage = false;
+            },
+            deleteFun: function (val) {
+                console.log("this in delete fun", val);
+                for (var i = 0; i < this.images.length; i++) {
+                    if (this.images[i].id == val) {
+                        this.images.splice(i, 1);
+                        break;
+                    }
+                }
             },
 
             handleChange: function (e) {

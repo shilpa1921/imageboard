@@ -52,3 +52,28 @@ module.exports.addComments = (username, comment, img_id) => {
         [username, comment, img_id]
     );
 };
+
+module.exports.deleteImg = (id) => {
+    return db
+        .query(`DELETE FROM images WHERE images.id = $1 RETURNING id`, [id])
+        .then((result) => {
+            return result;
+            console.log("delete image");
+        })
+        .catch((err) => {
+            console.log("err111", err);
+        });
+};
+module.exports.deleteImgWithComment = (id) => {
+    return db
+        .query(`DELETE FROM comments WHERE comments.img_id = $1 RETURNING id`, [
+            id,
+        ])
+        .then((result) => {
+            return result;
+            console.log("delete image");
+        })
+        .catch((err) => {
+            console.log("err111", err);
+        });
+};

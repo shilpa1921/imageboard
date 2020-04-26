@@ -47,6 +47,7 @@ img {
     display: grid;
     margin: 20px;
     grid-template-columns: 30% 30% 30%;
+    height: 300px;
 }
 
 .component {
