@@ -233,10 +233,6 @@ console.log("shilpa");
                 this.file = e.target.files[0];
             },
             seeMore: function () {
-                console.log(
-                    "This is the last image ID: ",
-                    this.images[this.images.length - 1].id
-                );
                 var lastId = { id: this.images[this.images.length - 1].id };
                 var self = this;
                 axios
