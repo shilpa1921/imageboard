@@ -48,6 +48,14 @@ img {
     margin: 20px;
     grid-template-columns: 30% 30% 30%;
     height: 300px;
+    padding-left: 30px;
+    grid-gap: 2ch;
+}
+
+#more {
+    position: relative;
+    left: 140%;
+    width: 150px;
 }
 
 .component {

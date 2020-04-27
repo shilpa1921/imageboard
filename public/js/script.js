@@ -23,10 +23,96 @@ console.log("shilpa");
                         "This is the response data: ",
                         response.data[0]
                     );
+                    console.log(
+                        "This is the response data for id next and pre: ",
+                        response.data[1].rows[0].id
+                    );
+                    // self.next = response.data[1].rows[0].id;
+                    // self.prev = response.data[1].rows[1].id;
+
+                    if (response.data[1].rows.length == 2) {
+                        self.next = response.data[1].rows[0].id;
+                        self.prev = response.data[1].rows[1].id;
+                    } else if (response.data[1].rows.length == 1) {
+                        if (self.id < response.data[1].rows[0].id) {
+                            self.prev = response.data[1].rows[0].id;
+                            self.next = 0;
+                        } else if (self.id > response.data[1].rows[0].id) {
+                            self.prev = 0;
+                            self.next = response.data[1].rows[0].id;
+                        }
+                    }
+                    console.log(
+                        "This is the response data for id next: ",
+                        self.next
+                    );
+                    console.log("This is cureent id: ", self.id);
+                    console.log(
+                        "This is the response data for  pre: ",
+                        self.prev
+                    );
                 })
                 .catch(function (err) {
                     console.log("Error in POST /image-post: ", err);
                 });
+        },
+
+        watch: {
+            id: function () {
+                console.log("id changed this is watcherrrr");
+
+                console.log("id in mounted of my component: ", this.id);
+                // we can now make a request to the server sending the id,
+                // and asking for all the information about that id.
+                var self = this;
+                axios
+                    .post("/info", { id: this.id })
+                    .then(function (response) {
+                        console.log(
+                            "This is the response data: ",
+                            response.data
+                        );
+
+                        self.arr = response.data.shift();
+                        console.log("This is the self array: ", self.arr);
+                        self.comments = response.data[0];
+
+                        console.log(
+                            "This is the response data: ",
+                            response.data[0]
+                        );
+                        if (response.data[1].rows.length == 2) {
+                            self.next = response.data[1].rows[0].id;
+                            self.prev = response.data[1].rows[1].id;
+                        } else if (response.data[1].rows.length == 1) {
+                            if (self.id < response.data[1].rows[0].id) {
+                                self.prev = response.data[1].rows[0].id;
+                                self.next = 0;
+                            } else if (self.id > response.data[1].rows[0].id) {
+                                self.prev = 0;
+                                self.next = response.data[1].rows[0].id;
+                            }
+                        }
+                        console.log(
+                            "This is the response data for id next: ",
+                            self.next
+                        );
+                        console.log(
+                            "This is the response data for  pre: ",
+                            self.prev
+                        );
+                        console.log(
+                            "This is the response data for  pre: ",
+                            self.prev
+                        );
+
+                        // self.next = response.data[1].rows[0].id;
+                        // self.prev = response.data[1].rows[1].id;
+                    })
+                    .catch(function (err) {
+                        console.log("Error in POST /image-post: ", err);
+                    });
+            },
         },
 
         data: function () {
@@ -37,6 +123,8 @@ console.log("shilpa");
                 comment: "",
                 comments: [],
                 del: "",
+                next: "",
+                prev: "",
             };
         },
         methods: {
@@ -79,12 +167,13 @@ console.log("shilpa");
     new Vue({
         el: "#main",
         data: {
-            selectedImage: false,
+            selectedImage: location.hash.slice(1),
             images: [],
             title: "",
             description: "",
             username: "",
             file: null,
+            more: true,
         },
         mounted: function () {
             var self = this;
@@ -93,6 +182,11 @@ console.log("shilpa");
                 // console.log('this INSIDE axios: ', self);
 
                 self.images = response.data;
+            });
+
+            window.addEventListener("hashchange", function () {
+                console.log("hash change has fired");
+                self.selectedImage = location.hash.slice(1);
             });
         },
         methods: {
@@ -120,8 +214,9 @@ console.log("shilpa");
 
             closeMe: function () {
                 console.log("close me");
-                this.selectedImage = false;
+                location.hash = "";
             },
+
             deleteFun: function (val) {
                 console.log("this in delete fun", val);
                 for (var i = 0; i < this.images.length; i++) {
@@ -136,6 +231,28 @@ console.log("shilpa");
                 console.log("handle change running");
                 console.log("file", e.target.files[0]);
                 this.file = e.target.files[0];
+            },
+            seeMore: function () {
+                console.log(
+                    "This is the last image ID: ",
+                    this.images[this.images.length - 1].id
+                );
+                var lastId = { id: this.images[this.images.length - 1].id };
+                var self = this;
+                axios
+                    .post("/moreImages", lastId)
+                    .then(function (response) {
+                        var lowestId =
+                            response.data[response.data.length - 1].lowest_id;
+                        var lastId = response.data[response.data.length - 1].id;
+                        if (lastId === lowestId) {
+                            self.more = false;
+                        }
+                        self.images.push(...response.data);
+                    })
+                    .catch(function (err) {
+                        console.log("Error in POST /get-more: ", err);
+                    });
             },
         },
     });

@@ -6,7 +6,7 @@ const db = spicedPg(
 
 module.exports.getimageinfos = () => {
     return db
-        .query(`SELECT * FROM images order by created_at DESC`)
+        .query(`SELECT * FROM images order by created_at DESC LIMIT 3`)
         .then((results) => {
             return results;
         })
@@ -76,4 +76,28 @@ module.exports.deleteImgWithComment = (id) => {
         .catch((err) => {
             console.log("err111", err);
         });
+};
+
+module.exports.getPreAndNext = (id) => {
+    return db
+        .query(
+            ` SELECT * from images WHERE (id = (SELECT min(id) from images WHERE id > $1) or  id = (SELECT max(id) from images WHERE id < $1) );`,
+            [id]
+        )
+        .then((result) => {
+            return result;
+            console.log("delete image");
+        })
+        .catch((err) => {
+            console.log("err111", err);
+        });
+};
+
+module.exports.getMoreImages = (id) => {
+    return db.query(
+        `SELECT *, (
+            SELECT id FROM images ORDER BY id ASC LIMIT 1
+        ) AS lowest_id FROM images WHERE id < $1 ORDER BY id DESC LIMIT 3;`,
+        [id]
+    );
 };

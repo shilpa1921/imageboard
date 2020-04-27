@@ -65,7 +65,22 @@ app.post("/info", (req, res) => {
                 })
                 .then((result) => {
                     finalJson.push(result);
-                    res.json(finalJson);
+                    // res.json(finalJson);
+                    // console.log("Shilkpa  awfdawfwa", finalJson);
+                })
+                .then(() => {
+                    db.getPreAndNext(id)
+                        .then((resultPN) => {
+                            console.log(
+                                "next and previous info",
+                                resultPN.rows
+                            );
+                            return resultPN;
+                        })
+                        .then((resultPN) => {
+                            finalJson.push(resultPN);
+                            res.json(finalJson);
+                        });
                 });
         })
         .catch((err) => {
@@ -127,6 +142,18 @@ app.post("/delete", (req, res) => {
         })
         .then((result) => {
             res.json(id);
+        });
+});
+
+app.post("/moreImages", (req, res) => {
+    var id = req.body.id;
+    return db
+        .getMoreImages(id)
+        .then((result) => {
+            res.json(result.rows);
+        })
+        .catch((err) => {
+            console.log("There is an error in More images ", err);
         });
 });
 
