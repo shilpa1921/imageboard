@@ -88,7 +88,16 @@
                 </form> 
                 <div id = "box" v-for = "each in comments">
                        <p id = "username"> {{each.username}}</p>
-                       <p id = "comment"> {{each.comment}}</p>
+                       <p id = "comment"> {{each.comment}} {{each.id}}</p>
+                    <button @click = "reply = each.id">reply</button>
+                    <form v-if="reply" id ="formcom">
+                      
+                    <input v-model = "username" type = "text" name = "username" placeholder="username">
+                    <input v-model = "comment" type = "text" name = "comment" placeholder="comment">
+                    <button @click = "replypostFun">Post</button>
+                   
+                  
+                </form>
                 </div>
                  <!-- <div v-for='each in comments'> -->
 

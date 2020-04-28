@@ -72,10 +72,10 @@ img {
     margin: 30px;
 }
 #box {
-    background-color: lightcoral;
+    /* background-color: lightcoral; */
     top: 100px;
     position: relative;
-    display: inline-block;
+    display: inline;
     margin: 10px;
     padding: 10px;
 }
