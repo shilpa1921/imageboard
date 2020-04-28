@@ -79,6 +79,12 @@ img {
     margin: 10px;
     padding: 10px;
 }
+
+#replybox {
+    position: relative;
+    left: 40px;
+    margin: 10px;
+}
 #username {
     font-size: 20px;
     font-family: italic;

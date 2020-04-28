@@ -5,30 +5,60 @@ console.log("shilpa");
         template: "#template",
         props: ["postTitle", "id"],
         mounted: function () {
-            this.mainModule();
+            console.log("postTile: ", this.postTitle);
+            console.log("id in mounted of my component: ", this.id);
+            // we can now make a request to the server sending the id,
+            // and asking for all the information about that id.
+            var self = this;
+            axios
+                .post("/info", { id: this.id })
+                .then(function (response) {
+                    console.log("This is the response data: ", response.data);
+
+                    self.arr = response.data.shift();
+                    console.log("This is the self array: ", self.arr);
+                    self.comments = response.data[0];
+
+                    console.log(
+                        "This is the response data: ",
+                        response.data[0]
+                    );
+                    console.log(
+                        "This is the response data for id next and pre: ",
+                        response.data[1].rows[0].id
+                    );
+                    // self.next = response.data[1].rows[0].id;
+                    // self.prev = response.data[1].rows[1].id;
+
+                    if (response.data[1].rows.length == 2) {
+                        self.next = response.data[1].rows[0].id;
+                        self.prev = response.data[1].rows[1].id;
+                    } else if (response.data[1].rows.length == 1) {
+                        if (self.id < response.data[1].rows[0].id) {
+                            self.prev = response.data[1].rows[0].id;
+                            self.next = 0;
+                        } else if (self.id > response.data[1].rows[0].id) {
+                            self.prev = 0;
+                            self.next = response.data[1].rows[0].id;
+                        }
+                    }
+                    console.log(
+                        "This is the response data for id next: ",
+                        self.next
+                    );
+                    console.log("This is cureent id: ", self.id);
+                    console.log(
+                        "This is the response data for  pre: ",
+                        self.prev
+                    );
+                })
+                .catch(function (err) {
+                    console.log("Error in POST /image-post: ", err);
+                });
         },
 
         watch: {
             id: function () {
-                this.mainModule();
-            },
-        },
-
-        data: function () {
-            return {
-                arr: [],
-                count: 0,
-                username: "",
-                comment: "",
-                comments: [],
-                del: "",
-                next: "",
-                prev: "",
-                reply: false,
-            };
-        },
-        methods: {
-            mainModule: function () {
                 console.log("id changed this is watcherrrr");
 
                 console.log("id in mounted of my component: ", this.id);
@@ -83,6 +113,22 @@ console.log("shilpa");
                         console.log("Error in POST /image-post: ", err);
                     });
             },
+        },
+
+        data: function () {
+            return {
+                arr: [],
+                count: 0,
+                username: "",
+                comment: "",
+                comments: [],
+                del: "",
+                next: "",
+                prev: "",
+                reply: false,
+            };
+        },
+        methods: {
             closeModal: function () {
                 console.log("i am emitting from the component... (child)");
                 this.$emit("close");

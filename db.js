@@ -6,7 +6,7 @@ const db = spicedPg(
 
 module.exports.getimageinfos = () => {
     return db
-        .query(`SELECT * FROM images order by created_at DESC LIMIT 3`)
+        .query(`SELECT * FROM images order by created_at DESC LIMIT 9`)
         .then((results) => {
             return results;
         })
@@ -53,6 +53,12 @@ module.exports.addComments = (username, comment, img_id) => {
     );
 };
 
+module.exports.addReply = (username, comment, comm_id) => {
+    return db.query(
+        `INSERT INTO replys (username, comment, comm_id) VALUES ($1, $2, $3) RETURNING *`,
+        [username, comment, comm_id]
+    );
+};
 module.exports.deleteImg = (id) => {
     return db
         .query(`DELETE FROM images WHERE images.id = $1 RETURNING id`, [id])
@@ -97,7 +103,15 @@ module.exports.getMoreImages = (id) => {
     return db.query(
         `SELECT *, (
             SELECT id FROM images ORDER BY id ASC LIMIT 1
-        ) AS lowest_id FROM images WHERE id < $1 ORDER BY id DESC LIMIT 3;`,
+        ) AS lowest_id FROM images WHERE id < $1 ORDER BY id DESC LIMIT 9;`,
+        [id]
+    );
+};
+
+module.exports.getreplyWithid = (id) => {
+    return db.query(
+        `SELECT replys.id,  replys.username, replys.comment FROM replys JOIN comments ON replys.comm_id = comments.id JOIN images ON comments.img_id = images.id WHERE comments
+.img_id = $1;`,
         [id]
     );
 };

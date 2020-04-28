@@ -38,6 +38,7 @@ app.get("/images", (req, res) => {
         .then((result) => {
             res.json(result);
         })
+
         .catch((err) => {
             console.log("error in /images", err);
         });
@@ -68,6 +69,7 @@ app.post("/info", (req, res) => {
                     // res.json(finalJson);
                     // console.log("Shilkpa  awfdawfwa", finalJson);
                 })
+
                 .then(() => {
                     db.getPreAndNext(id)
                         .then((resultPN) => {
@@ -83,6 +85,7 @@ app.post("/info", (req, res) => {
                         });
                 });
         })
+
         .catch((err) => {
             console.log("error in getting info for selected img", err);
         });
@@ -127,6 +130,17 @@ app.post("/upload-comment", (req, res) => {
 
     db.addComments(username, comment, img_id).then((result) => {
         console.log("Commnet inserted ", result.rows[0]);
+        res.json(result.rows[0]);
+    });
+});
+
+app.post("/reply", (req, res) => {
+    console.log("reply info", req.body);
+    var comm_id = req.body.id;
+    var username = req.body.username;
+    var comment = req.body.comment;
+    db.addReply(username, comment, comm_id).then((result) => {
+        console.log("reply inserted", result.rows[0]);
         res.json(result.rows[0]);
     });
 });
