@@ -10,18 +10,18 @@
     <h1>My imageboard</h1>
 
 
-<!-- this container for our vue instanceit will have access to our vue code -->
+    <!-- this container for our vue instanceit will have access to our vue code -->
     <div id = "main">
 
-      <first-component 
-   v-if="selectedImage" 
-   post-title="goodbye" 
-   :id="selectedImage"
-   @close = "closeMe"
-   @delete="deleteFun"
- 
-   
-  ></first-component>
+        <first-component 
+                v-if="selectedImage" 
+                post-title="goodbye" 
+                :id="selectedImage"
+                @close = "closeMe"
+                @delete="deleteFun"
+              
+                
+        ></first-component>
 
 
         <form id ="form">
@@ -34,38 +34,33 @@
 
 
 
-      <div id = container>
-      <ul id = "grid">
-       
-          <div v-for='image in images' >
-              <a :href = "'#'+ image.id">
-                    <div id = "image"> 
-                      
-                      <img v-bind:src="image.url"><br>
-                      {{image.title}} {{image.id}}
-                      
-                    </div> 
-                </a> 
-
-            </div>
-             <button v-if="more" id="more" @click="seeMore">See More</button>
-
-       </ul>
-      
+        <div id = container>
+           <ul id = "grid">
+                <div    v-for='image in images'   >
+                  <a   :href = "'#'+ image.id">
+                    <div class="imagehover">
+                      <div id = "image"> 
+                        <img v-bind:src="image.url"><br>
+                           {{image.title}}
+                      </div> 
+                   </div> 
+                  </a> 
+                </div>
+                <button v-if="more" id="more" @click="seeMore">See More</button>
+            </ul>
         </div>
-       
-    </div>
+      </div>
 
     <script type="text/x-template" id="template">
         <div class="component">
            <div>
                 <h1 @click="closeModal">X</h1>
                 <!-- <div v-for='item in name' ></div> -->
-                <div v-for='item in arr' >
-                <h2 id = "title">Title:{{item.title}}</h2>
+              <div v-for='item in arr' >
+                <p id = "title"><strong>Name:</strong>{{item.title}}</p>
                 <img v-bind:src="item.url"><br>
-                <h3 id ="desc">Description:{{item.description}}</h3>
-                <p id = "user">Created by {{item.username}}   {{item.created_at}}</p>
+                <p id ="desc"><strong>Description:</strong>{{item.description}}</p>
+                <p id = "user">Created by {{item.username}}   {{item.created_at.slice(0,10) }}</p>
                 
            
                 <a :href = "'#'+ prev">
@@ -73,40 +68,27 @@
                 <button @click = "deletePic">Delete</button>
                  <a  :href = "'#'+ next" >
                  <button v-if="next"  >next</button></a>
-                 
-                </div>
-
               </div>
+            </div>
               <div>
-                <form id ="formcom">
-                      
-                    <input v-model = "username" type = "text" name = "username" placeholder="username">
-                    <input v-model = "comment" type = "text" name = "comment" placeholder="comment">
-                    <button @click = "ClickInComponent">Post</button>
-                   
-                  
-                </form> 
-                <div id = "box" v-for = "each in comments">
-                       <p id = "username"> {{each.username}}</p>
-                       <p id = "comment"> {{each.comment}}</p>
-                   
+                  <form id ="formcom">
+                      <input v-model = "username" type = "text" name = "username" placeholder="username">
+                      <input v-model = "comment" type = "text" name = "comment" placeholder="comment">
+                      <button @click = "ClickInComponent">Post</button>
+                  </form> 
 
-                    
+                  <div id = "box" v-for = "each in comments">
+                        <p id = "username"> {{each.username}}</p>
+                        <p id = "comment"> {{each.comment}}</p>
+                      <!-- <button @click="count++">Click Me!</button>
+                      <h3>Count: {{count}}</h3> -->
+                  </div>
                 </div>
-                 <!-- <div v-for='each in comments'> -->
-
-          
-                 </div>
-               
-              </div>
-              
-            <!-- <button @click="count++">Click Me!</button>
-            <h3>Count: {{count}}</h3> -->
         </div>
     </script>
 
     <script src="/js/vue.js"></script>
     <script src="/js/axios.min.js"></script>
     <script src= "/js/script.js"></script>
-</body>
+  </body>
 </html>

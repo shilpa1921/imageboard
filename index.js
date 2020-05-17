@@ -29,6 +29,22 @@ const uploader = multer({
     },
 });
 
+const showTime = (posttime) => {
+    return (posttime = new Intl.DateTimeFormat("en-GB", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+        hour12: false,
+        // the following makes no sense, but it is what it is
+        // took quite some rounds of testing
+        timeZone: "Etc/GMT-2",
+    }).format(posttime));
+};
+
 app.get("/images", (req, res) => {
     db.getimageinfos()
         .then((results) => {
@@ -56,6 +72,7 @@ app.post("/info", (req, res) => {
         })
         .then((results) => {
             console.log("image info for selected image", results);
+
             finalJson.push(results);
         })
         .then(() => {
@@ -66,8 +83,6 @@ app.post("/info", (req, res) => {
                 })
                 .then((result) => {
                     finalJson.push(result);
-                    // res.json(finalJson);
-                    // console.log("Shilkpa  awfdawfwa", finalJson);
                 })
 
                 .then(() => {
@@ -104,12 +119,6 @@ app.post("/upload", uploader.single("file"), s3.upload, (req, res) => {
         let url = config.s3Url + filename;
         console.log("json", config.s3Url + filename);
 
-        // var data = {
-        //     url: url,
-        //     title: title,
-        //     username: username,
-        //     description: description,
-        // };
         db.addImage(url, username, title, description).then((result) => {
             console.log("newly added img", result.rows[0]);
 
@@ -171,4 +180,4 @@ app.post("/moreImages", (req, res) => {
         });
 });
 
-app.listen(process.env.PORT || 8080, () => console.log("Server is running"));
+app.listen(process.env.PORT || 8084, () => console.log("Server is running"));

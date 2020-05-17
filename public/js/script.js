@@ -1,117 +1,14 @@
-console.log("shilpa");
-
 (function () {
     Vue.component("first-component", {
         template: "#template",
         props: ["postTitle", "id"],
         mounted: function () {
-            console.log("postTile: ", this.postTitle);
-            console.log("id in mounted of my component: ", this.id);
-            // we can now make a request to the server sending the id,
-            // and asking for all the information about that id.
-            var self = this;
-            axios
-                .post("/info", { id: this.id })
-                .then(function (response) {
-                    console.log("This is the response data: ", response.data);
-
-                    self.arr = response.data.shift();
-                    console.log("This is the self array: ", self.arr);
-                    self.comments = response.data[0];
-
-                    console.log(
-                        "This is the response data: ",
-                        response.data[0]
-                    );
-                    console.log(
-                        "This is the response data for id next and pre: ",
-                        response.data[1].rows[0].id
-                    );
-                    // self.next = response.data[1].rows[0].id;
-                    // self.prev = response.data[1].rows[1].id;
-
-                    if (response.data[1].rows.length == 2) {
-                        self.next = response.data[1].rows[0].id;
-                        self.prev = response.data[1].rows[1].id;
-                    } else if (response.data[1].rows.length == 1) {
-                        if (self.id < response.data[1].rows[0].id) {
-                            self.prev = response.data[1].rows[0].id;
-                            self.next = 0;
-                        } else if (self.id > response.data[1].rows[0].id) {
-                            self.prev = 0;
-                            self.next = response.data[1].rows[0].id;
-                        }
-                    }
-                    console.log(
-                        "This is the response data for id next: ",
-                        self.next
-                    );
-                    console.log("This is cureent id: ", self.id);
-                    console.log(
-                        "This is the response data for  pre: ",
-                        self.prev
-                    );
-                })
-                .catch(function (err) {
-                    console.log("Error in POST /image-post: ", err);
-                });
+            this.model();
         },
 
         watch: {
             id: function () {
-                console.log("id changed this is watcherrrr");
-
-                console.log("id in mounted of my component: ", this.id);
-                // we can now make a request to the server sending the id,
-                // and asking for all the information about that id.
-                var self = this;
-                axios
-                    .post("/info", { id: this.id })
-                    .then(function (response) {
-                        console.log(
-                            "This is the response data: ",
-                            response.data
-                        );
-
-                        self.arr = response.data.shift();
-                        console.log("This is the self array: ", self.arr);
-                        self.comments = response.data[0];
-
-                        console.log(
-                            "This is the response data: ",
-                            response.data[0]
-                        );
-                        if (response.data[1].rows.length == 2) {
-                            self.next = response.data[1].rows[0].id;
-                            self.prev = response.data[1].rows[1].id;
-                        } else if (response.data[1].rows.length == 1) {
-                            if (self.id < response.data[1].rows[0].id) {
-                                self.prev = response.data[1].rows[0].id;
-                                self.next = 0;
-                            } else if (self.id > response.data[1].rows[0].id) {
-                                self.prev = 0;
-                                self.next = response.data[1].rows[0].id;
-                            }
-                        }
-                        console.log(
-                            "This is the response data for id next: ",
-                            self.next
-                        );
-                        console.log(
-                            "This is the response data for  pre: ",
-                            self.prev
-                        );
-                        console.log(
-                            "This is the response data for  pre: ",
-                            self.prev
-                        );
-
-                        // self.next = response.data[1].rows[0].id;
-                        // self.prev = response.data[1].rows[1].id;
-                    })
-                    .catch(function (err) {
-                        console.log("Error in POST /image-post: ", err);
-                    });
+                this.model();
             },
         },
 
@@ -132,6 +29,61 @@ console.log("shilpa");
             closeModal: function () {
                 console.log("i am emitting from the component... (child)");
                 this.$emit("close");
+            },
+            model: function () {
+                console.log("postTile: ", this.postTitle);
+                console.log("id in mounted of my component: ", this.id);
+                // we can now make a request to the server sending the id,
+                // and asking for all the information about that id.
+                var self = this;
+                axios
+                    .post("/info", { id: this.id })
+                    .then(function (response) {
+                        console.log(
+                            "This is the response data: ",
+                            response.data
+                        );
+
+                        self.arr = response.data.shift();
+                        console.log("This is the self array: ", self.arr);
+                        self.comments = response.data[0];
+
+                        console.log(
+                            "This is the response data: ",
+                            response.data[0]
+                        );
+                        console.log(
+                            "This is the response data for id next and pre: ",
+                            response.data[1].rows[0].id
+                        );
+                        // self.next = response.data[1].rows[0].id;
+                        // self.prev = response.data[1].rows[1].id;
+
+                        if (response.data[1].rows.length == 2) {
+                            self.next = response.data[1].rows[0].id;
+                            self.prev = response.data[1].rows[1].id;
+                        } else if (response.data[1].rows.length == 1) {
+                            if (self.id < response.data[1].rows[0].id) {
+                                self.prev = response.data[1].rows[0].id;
+                                self.next = 0;
+                            } else if (self.id > response.data[1].rows[0].id) {
+                                self.prev = 0;
+                                self.next = response.data[1].rows[0].id;
+                            }
+                        }
+                        console.log(
+                            "This is the response data for id next: ",
+                            self.next
+                        );
+                        console.log("This is cureent id: ", self.id);
+                        console.log(
+                            "This is the response data for  pre: ",
+                            self.prev
+                        );
+                    })
+                    .catch(function (err) {
+                        console.log("Error in POST /image-post: ", err);
+                    });
             },
 
             ClickInComponent: function (e) {
@@ -155,12 +107,17 @@ console.log("shilpa");
             deletePic: function (e) {
                 e.preventDefault();
                 console.log("this in delete", this);
-                axios.post("/delete", { id: this.id }).then((res) => {
-                    console.log("deleted", res.data);
-                });
+                const isConfirm = confirm(
+                    "Are you sure you want to delete the image"
+                );
+                if (isConfirm) {
+                    axios.post("/delete", { id: this.id }).then((res) => {
+                        console.log("deleted", res.data);
+                    });
 
-                this.$emit("close");
-                this.$emit("delete", this.id);
+                    this.$emit("close");
+                    this.$emit("delete", this.id);
+                }
             },
 
             // replyFun: function (e) {
